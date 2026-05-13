@@ -9,8 +9,7 @@ const signUpController = async (req, res) => {
 
     const createdUser = await User.create({
       email,
-      password: hashedPassword,
-      role: 'STAFF'
+      password: hashedPassword
     })
 
     res.status(201).json({
