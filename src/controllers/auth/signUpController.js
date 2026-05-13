@@ -2,17 +2,15 @@ import User from '../../models/userModel.js'
 import bcrypt from 'bcrypt'
 
 const signUpController = async (req, res) => {
-  const { email, password, role } = req.body
+  const { email, password } = req.body
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10)
 
-    const upperCaseRole = role.toUpperCase()
-
     const createdUser = await User.create({
       email,
       password: hashedPassword,
-      role: upperCaseRole
+      role: 'STAFF'
     })
 
     res.status(201).json({
