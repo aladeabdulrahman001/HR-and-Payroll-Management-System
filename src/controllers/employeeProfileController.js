@@ -34,11 +34,13 @@ const getEmployees = async (req, res) => {
       data: employees,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+  console.log(error.message);
+
+  res.status(500).json({
+    success: false,
+    message: 'Unable to fetch employees',
+  });
+}
 };
 
 const deactivateEmployee = async (req, res) => {
@@ -66,11 +68,13 @@ const deactivateEmployee = async (req, res) => {
       data: employee,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+  console.log(error.message);
+
+  res.status(500).json({
+    success: false,
+    message: 'Unable to deactivate employee',
+  });
+}
 };
 
 export default {

@@ -4,7 +4,6 @@ const createDepartment = async (req, res) => {
   try {
     const { name, description, managerId } = req.body;
 
-    // Check if department already exists
     const existingDepartment =
       await Department.findOne({ name });
 
@@ -26,6 +25,7 @@ const createDepartment = async (req, res) => {
       message: 'Department created successfully',
       data: department,
     });
+
   } catch (error) {
     res.status(500).json({
       success: false,
