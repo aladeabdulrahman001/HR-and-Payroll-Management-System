@@ -21,7 +21,10 @@ const userSchema = new Schema(
       enum: ['ADMIN', 'STAFF', 'USER'],
       default: 'STAFF',
       required: true
-    }
+    },
+    isActive: { type: Boolean, default: false },
+    inviteToken: { type: String, default: null },
+    inviteExpiry: { type: Date, default: null }
   },
   { timestamps: true }
 )
