@@ -1,15 +1,23 @@
 import express from 'express';
 
-import adminDepartmentController from '../controllers/adminDepartmentController.js';
+import {
+  createDepartment,
+  getDepartments,
+} from '../controllers/adminDepartmentController.js';
 
-import validateDepartmentCreation from '../middlewares/departmentValidation.middleware.js';
+import validateDepartment from '../middlewares/departmentValidation.middleware.js';
 
 const router = express.Router();
 
 router.post(
   '/departments',
-  validateDepartmentCreation,
-  adminDepartmentController.createDepartment
+  validateDepartment,
+  createDepartment
+);
+
+router.get(
+  '/departments',
+  getDepartments
 );
 
 export default router;

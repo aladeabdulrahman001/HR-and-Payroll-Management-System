@@ -41,4 +41,4 @@ const getDepartments = async (req, res) => {
 export default {
   createDepartment,
   getDepartments,
-};
+}

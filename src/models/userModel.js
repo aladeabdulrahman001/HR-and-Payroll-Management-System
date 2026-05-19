@@ -13,7 +13,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      required: true,
+      required: false, // Password is not required for invited users until they set it
       minlength: 8
     },
     role: {
@@ -21,7 +21,20 @@ const userSchema = new Schema(
       enum: ['ADMIN', 'STAFF', 'USER'],
       default: 'STAFF',
       required: true
-    }
+    },
+    inviteToken: {
+      type: String,
+    },
+
+    inviteExpiry: {
+      type: Date,
+    },
+
+    isActive: {
+      type: Boolean,
+      default: false,
+    },  
+    
   },
   { timestamps: true }
 )
@@ -29,3 +42,5 @@ const userSchema = new Schema(
 const User = mongoose.model('User', userSchema)
 
 export default User
+
+
