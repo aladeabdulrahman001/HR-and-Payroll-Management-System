@@ -4,17 +4,18 @@ dotenv.config({
   path: '.env.development.local'
 })
 
-import express from 'express'
-import { PORT } from './utils/env.js'
-import connectToDatabase from './utils/mongoose.js'
-import authRouter from './routes/auth.routes.js'
-import departmentRoutes from './routes/departmentRoutes.js'
-import employeeRoutes from './routes/employeeProfileRoutes.js'
-import hrRoutes from './routes/hrRoutes.js'
-import errorMiddleware from './middlewares/error.middleware.js'
-import cookieParser from 'cookie-parser'
+import express from 'express';
+import { PORT } from './utils/env.js';
+import connectToDatabase from './utils/mongoose.js';
+import authRouter from './routes/auth.routes.js';
+import departmentRoutes from './routes/departmentRoutes.js';
+import employeeRoutes from './routes/employeeProfileRoutes.js';
+import hrRoutes from './routes/hrRoutes.js';
+import payrollRoutes from './routes/payroll.routes.js';
+import errorMiddleware from './middlewares/error.middleware.js';
+import cookieParser from 'cookie-parser';
 
-const app = express()
+const app = express();
 
 // Helps process form data sent via HTML forms
 app.use(express.urlencoded({ extended: false }))
@@ -32,6 +33,8 @@ app.use('/api/departments', departmentRoutes)
 app.use('/api/employees', employeeRoutes)
 
 app.use('/api/hr', hrRoutes)
+
+app.use('/api/payroll', payrollRoutes);
 
 app.get('/', (req, res) => {
   res.send('Welcome to the HR and Payroll Management System API')

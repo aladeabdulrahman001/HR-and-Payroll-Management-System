@@ -4,33 +4,29 @@ const attendanceSchema = new mongoose.Schema(
   {
     employeeId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'EmployeeProfile',
-      required: true
+      ref: 'EmployeeProfile',        
+      required: true,
     },
-
     date: {
       type: Date,
-      required: true
+      required: true,
     },
-
     clockIn: {
       type: Date,
-      required: true
+      required: true,
     },
-
     clockOut: {
       type: Date,
-      default: null
+      default: null,
     },
-
     totalHours: {
       type: Number,
-      default: 0
-    }
+      default: 0,
+    },
   },
   { timestamps: true }
-)
+);
 
-const Attendance = mongoose.model('Attendance', attendanceSchema)
+const Attendance = mongoose.model('Attendance', attendanceSchema);
 
-export default Attendance
+export default Attendance;
