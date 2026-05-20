@@ -1,13 +1,13 @@
-import express from 'express';
-import employeeController from '../controllers/employeeProfileController.js';
+import express from 'express'
+import {
+  getEmployees,
+  deactivateEmployee
+} from '../controllers/employeeProfileController.js'
 
-const router = express.Router();
+const router = express.Router()
 
-router.get('/', employeeController.getEmployees);
+router.get('/', getEmployees)
 
-router.patch(
-  '/:id/deactivate',
-  employeeController.deactivateEmployee
-);
+router.patch('/:id/deactivate', deactivateEmployee)
 
-export default router;
+export default router

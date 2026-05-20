@@ -1,8 +1,8 @@
-import express from 'express';
-import departmentController from '../controllers/departmentController.js';
+import express from 'express'
+import { getDepartments } from '../controllers/departmentController.js'
 
-const router = express.Router();
+const router = express.Router()
 
-router.get('/', departmentController.getDepartments);
+router.get('/', getDepartments)
 
-export default router;
+export default router

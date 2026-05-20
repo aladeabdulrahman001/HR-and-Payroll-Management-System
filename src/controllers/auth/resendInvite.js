@@ -44,7 +44,7 @@ const resendInvite = async (req, res) => {
     const link = `${process.env.CLIENT_URL}/setup-account?token=${inviteToken}`
     await sendEmail({
       to: email,
-      subject: 'Attendant Account Invitation',
+      subject: 'Account Setup Re-invitation',
       text: `Hi, here is your new setup link: ${link}. This link expires in 24 hours.`
     })
 

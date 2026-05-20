@@ -1,11 +1,18 @@
-import express from 'express';
-import hrController from '../controllers/hrController.js';
+import express from 'express'
+import inviteUser from '../controllers/auth/inviteUser.js'
+import setRole from '../middlewares/auth/setRole.js'
+import authentication from '../middlewares/auth/authentication.js'
+import authorization from '../middlewares/auth/authorization.js'
 
-const router = express.Router();
+const router = express.Router()
+
+router.use(authentication)
 
 router.post(
-  '/invite-employee',
-  hrController.inviteEmployee
-);
+  '/onboard/employee',
+  authorization('ADMIN', 'HRM'),
+  setRole('STAFF'),
+  inviteUser
+)
 
-export default router;
+export default router

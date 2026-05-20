@@ -1,26 +1,26 @@
-// controllers/admin/inviteHR.js
 import User from '../../models/userModel.js'
-import Employee from '../../models/employeeModel.js'
-import sendEmail from '../../config/nodeMailer.js'
+import EmployeeProfile from '../../models/employeeProfileModel.js'
+import sendEmail from '../../utils/sendEmail.js'
 import crypto from 'crypto'
 
-const inviteHR = async (req, res) => {
+const inviteUser = async (req, res) => {
   const {
     email,
     firstName,
     lastName,
     phone,
-    department,
-    position,
-    salary,
-    startDate
+    address,
+    departmentId,
+    jobTitle,
+    hireDate,
+    role
   } = req.body
   try {
     let user = await User.findOne({ email })
 
     if (user && user.isActive) {
       return res.status(409).json({
-        ok: false,
+        success: false,
         error: { message: 'User already exists' }
       })
     }
@@ -34,46 +34,45 @@ const inviteHR = async (req, res) => {
       user = await User.create({
         email,
         password: null,
-        role: 'hr',
+        role,
         isActive: false,
         inviteToken,
         inviteExpiry
       })
 
-      const count = await Employee.countDocuments()
-      const employeeId = `EMP-${String(count + 1).padStart(4, '0')}`
+      //   const count = await EmployeeProfile.countDocuments()
+      //   const employeeId = `${new Date().getFullYear()}-${department.slice(0, 3).toUpperCase()}-${String(count + 1).padStart(4, '0')}`
 
-      await Employee.create({
-        user: user._id,
-        employeeId,
+      await EmployeeProfile.create({
+        userId: user._id,
         firstName,
         lastName,
         phone,
-        department,
-        position,
-        salary,
-        startDate
+        address,
+        departmentId,
+        jobTitle,
+        hireDate
       })
     }
 
     const link = `${process.env.CLIENT_URL}/setup-account?token=${inviteToken}`
     await sendEmail({
       to: email,
-      subject: 'HR Account Invitation',
-      text: `Hi ${firstName}, you have been invited as an HR. Set up your account here: ${link}. This link expires in 24 hours. If it expires, request a new one at ${process.env.CLIENT_URL}/resend-invite`
+      subject: 'Account Invitation',
+      text: `Hi ${firstName}, you have been invited as ${role}. Set up your account here: ${link}. This link expires in 24 hours. If it expires, request a new one at ${process.env.CLIENT_URL}/resend-invite`
     })
 
     res.status(201).json({
-      ok: true,
-      message: 'HR invited successfully'
+      success: true,
+      message: `${role} invited successfully`
     })
   } catch (err) {
     console.error(err.message)
     res.status(500).json({
-      ok: false,
-      error: { message: 'Could not invite HR' }
+      success: false,
+      error: { message: 'Could not invite user' }
     })
   }
 }
 
-export default inviteHR
+export default inviteUser

@@ -1,62 +1,59 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const employeeProfileSchema = new mongoose.Schema(
   {
     userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-   },
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User'
+    },
 
     firstName: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
 
     lastName: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
 
     phone: {
       type: String,
       required: true,
-      trim: true,
+      trim: true
     },
 
     address: {
       type: String,
-      trim: true,
+      trim: true
     },
 
     hireDate: {
       type: Date,
-      required: true,
+      required: true
     },
 
     jobTitle: {
       type: String,
-      required: true,
+      required: true
     },
 
     departmentId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Department',
-      required: true,
+      required: true
     },
 
     isActive: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
-);
+)
 
-export default mongoose.model(
-  'EmployeeProfile',
-  employeeProfileSchema
-);
+export default mongoose.model('EmployeeProfile', employeeProfileSchema)
