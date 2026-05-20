@@ -14,6 +14,7 @@ import hrRoutes from './routes/hrRoutes.js'
 import adminRouter from './routes/adminRoutes.js'
 import errorMiddleware from './middlewares/error.middleware.js'
 import cookieParser from 'cookie-parser'
+import payrollRoutes from './routes/payroll.routes.js'
 
 const app = express()
 
@@ -35,6 +36,8 @@ app.use('/api/employees', employeeRoutes)
 app.use('/api/hr', hrRoutes)
 
 app.use('/api/admin', adminRouter)
+
+app.use('/api/payroll', payrollRoutes)
 
 app.get('/', (req, res) => {
   res.send('Welcome to the HR and Payroll Management System API')
