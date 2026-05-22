@@ -1,4 +1,4 @@
-import EmployeeProfile from '../models/employeeProfileModel.js';
+import EmployeeProfile from '../models/employeeProfileModel.js'
 
 const inviteEmployee = async (req, res) => {
   try {
@@ -7,36 +7,35 @@ const inviteEmployee = async (req, res) => {
       lastName,
       phone,
       address,
-      hireDate,
+      userId,
       jobTitle,
-      departmentId,
-    } = req.body;
+      departmentId
+    } = req.body
 
-    const employeeProfile =
-      await EmployeeProfile.create({
-        firstName,
-        lastName,
-        phone,
-        address,
-        hireDate,
-        jobTitle,
-        departmentId,
-      });
+    const employeeProfile = await EmployeeProfile.create({
+      firstName,
+      lastName,
+      phone,
+      address,
+      hireDate: new Date(),
+      userId,
+      jobTitle,
+      departmentId
+    })
 
     res.status(201).json({
       success: true,
-      message:
-        'Employee profile created successfully',
-      data: employeeProfile,
-    });
+      message: 'Employee profile created successfully',
+      data: employeeProfile
+    })
   } catch (error) {
     res.status(500).json({
       success: false,
-      message: error.message,
-    });
+      message: error.message
+    })
   }
-};
+}
 
 export default {
-  inviteEmployee,
-};
+  inviteEmployee
+}

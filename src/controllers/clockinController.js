@@ -14,7 +14,14 @@ const clockIn = async (req, res) => {
 
     const populateAttendance = await Attendance.findById(
       attendance._id
-    ).populate('employeeId', 'email role')
+    ).populate({
+      path: 'employeeId',
+      select: 'firstName lastName',
+      populate: {
+        path: 'departmentId',
+        select: 'name'
+      }
+    })
 
     res.status(201).json({
       success: true,

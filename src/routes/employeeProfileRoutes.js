@@ -5,7 +5,6 @@ import clockinValidation from '../middlewares/auth/clockinValidation.js'
 import clockoutValidation from '../middlewares/auth/clockoutValidation.js'
 import clockIn from '../controllers/clockinController.js'
 import clockOut from '../controllers/clockoutController.js'
-import authentication from '../middlewares/auth/authentication.js'
 
 const router = express.Router()
 router.use(authentication)
