@@ -10,11 +10,14 @@ const createDepartment = async (req, res) => {
       data: department,
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: error.message,
-    });
-  }
+  console.log(error.message);
+
+  res.status(500).json({
+    success: false,
+    message: 'Unable to create department',
+  });
+}
+    
 };
 
 const getDepartments = async (req, res) => {
@@ -38,4 +41,4 @@ const getDepartments = async (req, res) => {
 export default {
   createDepartment,
   getDepartments,
-};
+}

@@ -1,19 +1,30 @@
-import express from 'express'
-import authentication from '../middlewares/auth/authentication.js'
-import employeeController from '../controllers/employeeProfileController.js'
-import clockinValidation from '../middlewares/auth/clockinValidation.js'
-import clockoutValidation from '../middlewares/auth/clockoutValidation.js'
-import clockIn from '../controllers/clockinController.js'
-import clockOut from '../controllers/clockoutController.js'
-import authentication from '../middlewares/auth/authentication.js'
+import express from 'express';
 
-const router = express.Router()
-router.use(authentication)
+import {
+  deactivateEmployee,
+} from '../controllers/employeeProfileController.js';
+import clockinValidation from '../middlewares/auth/clockinValidation.js';
+import clockoutValidation from '../middlewares/auth/clockoutValidation.js';
+import clockIn from '../controllers/clockinController.js';
+import clockOut from '../controllers/clockoutController.js';
 
-router.get('/', employeeController.getEmployees)
-router.post('/clockout', clockoutValidation, clockOut)
-router.post('/clockin', clockinValidation, clockIn)
+const router = express.Router();
 
-router.patch('/:id/deactivate', employeeController.deactivateEmployee)
+router.post(
+  '/clockout/:id',
+  clockoutValidation,
+  clockOut
+);
 
-export default router
+router.post(
+  '/clockin/:id',
+  clockinValidation,
+  clockIn
+);
+
+router.patch(
+  '/:id/deactivate',
+  deactivateEmployee
+);
+
+export default router;

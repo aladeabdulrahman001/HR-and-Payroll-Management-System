@@ -1,11 +1,15 @@
 import express from 'express';
+
 import hrController from '../controllers/hrController.js';
+
+
+import { getEmployees, } from '../controllers/employeeProfileController.js';
 
 const router = express.Router();
 
-router.post(
-  '/invite-employee',
-  hrController.inviteEmployee
+router.get(
+  '/employees',
+  getEmployees
 );
 
 export default router;
