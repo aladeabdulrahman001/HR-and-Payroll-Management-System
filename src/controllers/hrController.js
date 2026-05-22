@@ -1,5 +1,7 @@
 
+
 import EmployeeProfile from '../models/employeeProfileModel.js';
+
 
 
 
@@ -14,10 +16,11 @@ const inviteEmployee = async (
       lastName,
       phone,
       address,
-      hireDate,
+      userId,
       jobTitle,
-      departmentId,
-    } = req.body;
+      departmentId
+    } = req.body
+
 
     let user =
       await User.findOne({ email });
@@ -65,6 +68,7 @@ const inviteEmployee = async (
       });
     }
 
+
     // Invitation link
     const link =
       `${process.env.CLIENT_URL}` +
@@ -83,20 +87,24 @@ const inviteEmployee = async (
 
     return res.status(200).json({
       success: true,
+
       message:
         'Employee invited successfully',
     });
+
   } catch (error) {
     console.log(error.message);
 
     return res.status(500).json({
       success: false,
+
       message:
         'Could not invite employee',
     });
+
   }
-};
+}
 
 export default {
-  inviteEmployee,
-};
+  inviteEmployee
+}

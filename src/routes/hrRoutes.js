@@ -1,15 +1,17 @@
-import express from 'express';
+import express from 'express'
+import attendanceController from '../controllers/attendanceController.js'
+import hrController from '../controllers/hrController.js'
+import { getEmployees } from '../controllers/employeeProfileController.js'
+import attendanceValidation from '../middlewares/auth/attendanceValidation.js'
+const router = express.Router()
 
-import hrController from '../controllers/hrController.js';
-
-
-import { getEmployees, } from '../controllers/employeeProfileController.js';
-
-const router = express.Router();
-
+router.post('/invite-employee', hrController.inviteEmployee)
+router.get('/get-empolyee', attendanceController.getAttendance)
 router.get(
-  '/employees',
-  getEmployees
-);
+  '/employee/:id',
+  attendanceValidation,
+  attendanceController.getSingleAttendance
+)
 
-export default router;
+router.get('/employees', getEmployees)
+export default router

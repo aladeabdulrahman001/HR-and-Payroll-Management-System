@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
+
 import EmployeeProfile from '../../models/employeeProfileModel.js';
+
 import Attendance from '../../models/attendance.js'
 
 const clockoutValidation = async (req, res, next) => {
