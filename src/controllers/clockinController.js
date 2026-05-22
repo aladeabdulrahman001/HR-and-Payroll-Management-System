@@ -1,9 +1,11 @@
 import Attendance from '../models/attendance.js'
+import EmployeeProfile from '../models/employeeProfileModel.js'
 
 const clockIn = async (req, res) => {
   try {
-    const { employeeId } = req.body
-
+    const userId = req.user.userId
+    const employee = await EmployeeProfile.findOne({ userId })
+    const employeeId = employee._id
     const attendance = await Attendance.create({
       employeeId,
       date: new Date(),
