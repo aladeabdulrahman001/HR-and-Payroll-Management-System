@@ -1,9 +1,7 @@
-<<<<<<< HEAD
-import EmployeeProfile from '../models/employeeProfileModel.js'
-=======
+
 
 import EmployeeProfile from '../models/employeeProfileModel.js';
->>>>>>> main
+
 
 
 
@@ -23,18 +21,7 @@ const inviteEmployee = async (
       departmentId
     } = req.body
 
-<<<<<<< HEAD
-    const employeeProfile = await EmployeeProfile.create({
-      firstName,
-      lastName,
-      phone,
-      address,
-      hireDate: new Date(),
-      userId,
-      jobTitle,
-      departmentId
-    })
-=======
+
     let user =
       await User.findOne({ email });
 
@@ -80,7 +67,7 @@ const inviteEmployee = async (
         departmentId,
       });
     }
->>>>>>> main
+
 
     // Invitation link
     const link =
@@ -100,28 +87,21 @@ const inviteEmployee = async (
 
     return res.status(200).json({
       success: true,
-<<<<<<< HEAD
-      message: 'Employee profile created successfully',
-      data: employeeProfile
-    })
-=======
+
       message:
         'Employee invited successfully',
     });
->>>>>>> main
+
   } catch (error) {
     console.log(error.message);
 
     return res.status(500).json({
       success: false,
-<<<<<<< HEAD
-      message: error.message
-    })
-=======
+
       message:
         'Could not invite employee',
     });
->>>>>>> main
+
   }
 }
 
