@@ -1,6 +1,7 @@
 import express from 'express'
-import hrController from '../controllers/hrController.js'
 import attendanceController from '../controllers/attendanceController.js'
+import hrController from '../controllers/hrController.js'
+import { getEmployees } from '../controllers/employeeProfileController.js'
 import attendanceValidation from '../middlewares/auth/attendanceValidation.js'
 const router = express.Router()
 
@@ -12,4 +13,5 @@ router.get(
   attendanceController.getSingleAttendance
 )
 
+router.get('/employees', getEmployees)
 export default router
