@@ -1,6 +1,6 @@
 import mongoose from 'mongoose'
 import Attendance from '../../models/attendance.js'
-import EmployeeProfile from '../models/employeeProfileModel.js'
+import EmployeeProfile from '../../models/employeeProfileModel.js'
 
 const clockinValidation = async (req, res, next) => {
   const userId = req.user.userId

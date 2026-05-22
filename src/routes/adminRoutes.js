@@ -3,6 +3,7 @@ import authentication from '../middlewares/auth/authentication.js'
 import authorization from '../middlewares/auth/authorization.js'
 import setRole from '../middlewares/auth/setRole.js'
 import inviteUser from '../controllers/auth/inviteUser.js'
+import inviteUserValidation from '../middlewares/auth/inviteUserValidation.js'
 
 // import { createDepartment } from '../controllers/departmentController.js'
 
@@ -14,6 +15,7 @@ adminRouter.post(
   '/onboard/admin',
   authorization('ADMIN'),
   setRole('ADMIN'),
+  inviteUserValidation,
   inviteUser
 )
 
@@ -21,6 +23,7 @@ adminRouter.post(
   '/onboard/hr',
   authorization('ADMIN'),
   setRole('HRM'),
+  inviteUserValidation,
   inviteUser
 )
 
