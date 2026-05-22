@@ -10,12 +10,24 @@ const createDepartment = async (req, res) => {
       data: department
     })
   } catch (error) {
+<<<<<<< HEAD
     res.status(500).json({
       success: false,
       message: error.message
     })
   }
 }
+=======
+  console.log(error.message);
+
+  res.status(500).json({
+    success: false,
+    message: 'Unable to create department',
+  });
+}
+    
+};
+>>>>>>> main
 
 const getDepartments = async (req, res) => {
   try {
@@ -37,4 +49,11 @@ const getDepartments = async (req, res) => {
   }
 }
 
+<<<<<<< HEAD
 export { createDepartment, getDepartments }
+=======
+export default {
+  createDepartment,
+  getDepartments,
+}
+>>>>>>> main

@@ -18,20 +18,17 @@ import payrollRoutes from './routes/payroll.routes.js'
 
 const app = express()
 
-// Helps process form data sent via HTML forms
+// Middleware
 app.use(express.urlencoded({ extended: false }))
-
-// Reads cookies from incoming requests
 app.use(cookieParser())
-
 app.use(express.json())
 
 // Routes
 app.use('/api/v1/auth', authRouter)
 
-app.use('/api/departments', departmentRoutes)
-
 app.use('/api/employees', employeeRoutes)
+
+app.use('/api/departments', departmentRoutes)
 
 app.use('/api/hr', hrRoutes)
 

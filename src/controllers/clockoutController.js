@@ -17,18 +17,23 @@ const clockOut = async (req, res) => {
     attendance.totalHours = calculateTotalHours(
       attendance.clockIn,
       attendance.clockOut
-    )
+    ).toFixed(2)
 
     await attendance.save()
 
     const populateAttendance = await Attendance.findById(
       attendance._id
-    ).populate('employeeId', 'email role')
-
+    ).populate({
+      path: 'employeeId',
+      select: 'firstName lastName',
+      populate: {
+        path: 'departmentId',
+        select: 'name'
+      }
+    })
     res.status(200).json({
       success: true,
       message: 'Clock out successful',
-      totalHours: attendance.totalHours.toFixed(2),
       data: populateAttendance
     })
   } catch (error) {
