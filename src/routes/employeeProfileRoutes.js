@@ -1,17 +1,19 @@
 import express from 'express'
-
-import { deactivateEmployee } from '../controllers/employeeProfileController.js'
-import clockinValidation from '../middlewares/auth/clockinValidation.js'
-import clockoutValidation from '../middlewares/auth/clockoutValidation.js'
+import authorization from '../middlewares/auth/authorization.js'
+import authentication from '../middlewares/auth/authentication.js'
+import clockinValidation from '../middlewares/validators/clockinValidation.js'
+import clockoutValidation from '../middlewares/validators/clockoutValidation.js'
 import clockIn from '../controllers/clockinController.js'
 import clockOut from '../controllers/clockoutController.js'
 
 const router = express.Router()
 
-router.post('/clockout/:id', clockoutValidation, clockOut)
+router.use(authentication)
 
-router.post('/clockin/:id', clockinValidation, clockIn)
+router.use(authorization('ADMIN', 'HRM', 'STAFF'))
 
-router.patch('/:id/deactivate', deactivateEmployee)
+router.post('/clockout', clockoutValidation, clockOut)
+
+router.post('/clockin', clockinValidation, clockIn)
 
 export default router

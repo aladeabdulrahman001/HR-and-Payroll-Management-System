@@ -55,4 +55,4 @@ const getSingleAttendance = async (req, res) => {
   }
 }
 
-export default { getAttendance, getSingleAttendance }
+export { getAttendance, getSingleAttendance }

@@ -1,74 +1,71 @@
-import EmployeeProfile from '../models/employeeProfileModel.js';
+import EmployeeProfile from '../models/employeeProfileModel.js'
 
-export const getEmployees = async (req, res) => {
+const getEmployees = async (req, res) => {
   try {
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
+    const page = Number(req.query.page) || 1
+    const limit = Number(req.query.limit) || 10
+    const skip = (page - 1) * limit
 
-    const filter = { isActive: true };
+    const filter = { isActive: true }
 
     if (req.query.departmentId) {
-      filter.departmentId = req.query.departmentId;
+      filter.departmentId = req.query.departmentId
     }
 
-    const sort = req.query.sort || 'createdAt';
+    const sort = req.query.sort || 'createdAt'
 
     const employees = await EmployeeProfile.find(filter)
       .populate('departmentId', 'name')
       .populate('userId', 'email role')
       .sort(sort)
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
 
     res.status(200).json({
       success: true,
       count: employees.length,
       page,
-      data: employees,
-    });
+      data: employees
+    })
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
 
     res.status(500).json({
       success: false,
-      message: 'Unable to fetch employees',
-    });
-  }
-};
 
-export const deactivateEmployee = async (
-  req,
-  res
-) => {
+      message: 'Unable to fetch employees'
+    })
+  }
+}
+
+const deactivateEmployee = async (req, res) => {
   try {
-    const employee =
-      await EmployeeProfile.findByIdAndUpdate(
-        req.params.id,
-        { isActive: false },
-        { new: true }
-      );
+    const employee = await EmployeeProfile.findByIdAndUpdate(
+      req.params.id,
+      { isActive: false },
+      { new: true }
+    )
 
     if (!employee) {
       return res.status(404).json({
         success: false,
-        message: 'Employee not found',
-      });
+        message: 'Employee not found'
+      })
     }
 
     res.status(200).json({
       success: true,
-      message:
-        'Employee deactivated successfully',
-      data: employee,
-    });
+      message: 'Employee deactivated successfully',
+      data: employee
+    })
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
 
     res.status(500).json({
       success: false,
-      message:
-        'Unable to deactivate employee',
-    });
+      message: 'Unable to deactivate employee'
+    })
   }
-};
+}
+
+export { getEmployees, deactivateEmployee }

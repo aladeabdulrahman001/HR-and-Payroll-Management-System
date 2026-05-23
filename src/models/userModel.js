@@ -18,23 +18,13 @@ const userSchema = new Schema(
     },
     role: {
       type: String,
-      enum: ['ADMIN', 'STAFF', 'USER'],
+      enum: ['ADMIN', 'STAFF', 'HRM'],
       default: 'STAFF',
       required: true
     },
-    inviteToken: {
-      type: String,
-    },
-
-    inviteExpiry: {
-      type: Date,
-    },
-
-    isActive: {
-      type: Boolean,
-      default: false,
-    },  
-    
+    isActive: { type: Boolean, default: false },
+    inviteToken: { type: String, default: null },
+    inviteExpiry: { type: Date, default: null }
   },
   { timestamps: true }
 )
@@ -42,5 +32,3 @@ const userSchema = new Schema(
 const User = mongoose.model('User', userSchema)
 
 export default User
-
-
