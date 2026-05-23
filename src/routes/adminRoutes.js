@@ -12,7 +12,7 @@ import validateDepartmentCreation from '../middlewares/validators/departmentVali
 import {
   deactivateEmployee,
   getEmployees
-} from '../controllers/employeeProfileController.js'
+} from '../controllers/hr/employeeProfileController.js'
 
 const adminRouter = express.Router()
 

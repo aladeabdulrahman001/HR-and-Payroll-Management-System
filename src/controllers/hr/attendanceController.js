@@ -1,6 +1,6 @@
-import Attendance from '../models/attendance.js'
+import Attendance from '../../models/attendance.js'
 import mongoose from 'mongoose'
-import EmployeeProfile from '../models/employeeProfileModel.js'
+import EmployeeProfile from '../../models/employeeProfileModel.js'
 
 const getAttendance = async (req, res) => {
   try {

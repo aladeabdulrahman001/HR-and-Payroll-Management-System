@@ -57,4 +57,6 @@ const employeeProfileSchema = new mongoose.Schema(
   }
 )
 
-export default mongoose.model('EmployeeProfile', employeeProfileSchema)
+const EmployeeProfile = mongoose.model('EmployeeProfile', employeeProfileSchema)
+
+export default EmployeeProfile
