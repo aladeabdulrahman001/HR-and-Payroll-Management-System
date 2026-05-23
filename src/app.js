@@ -1,14 +1,11 @@
 import dotenv from 'dotenv'
-
 dotenv.config({
   path: '.env.development.local'
 })
-
 import express from 'express'
 import { PORT } from './utils/env.js'
 import connectToDatabase from './utils/mongoose.js'
 import authRouter from './routes/auth.routes.js'
-import departmentRoutes from './routes/departmentRoutes.js'
 import employeeRoutes from './routes/employeeProfileRoutes.js'
 import hrRoutes from './routes/hrRoutes.js'
 import adminRouter from './routes/adminRoutes.js'
@@ -27,8 +24,6 @@ app.use(express.json())
 app.use('/api/v1/auth', authRouter)
 
 app.use('/api/employees', employeeRoutes)
-
-app.use('/api/departments', departmentRoutes)
 
 app.use('/api/hr', hrRoutes)
 

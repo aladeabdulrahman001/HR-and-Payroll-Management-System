@@ -1,4 +1,4 @@
-import User from '../models/userModel.js'
+import User from '../../models/userModel.js'
 
 const validateUpdateUser = async (req, res, next) => {
   const userId = req.user.userId

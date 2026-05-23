@@ -22,12 +22,8 @@ const employeeProfileSchema = new mongoose.Schema(
     phone: {
       type: String,
       required: true,
-<<<<<<< HEAD
-      trim: true
-=======
       unique: true,
-      trim: true,
->>>>>>> main
+      trim: true
     },
 
     address: {

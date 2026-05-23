@@ -1,14 +1,6 @@
+import EmployeeProfile from '../models/employeeProfileModel.js'
 
-
-import EmployeeProfile from '../models/employeeProfileModel.js';
-
-
-
-
-const inviteEmployee = async (
-  req,
-  res
-) => {
+const inviteEmployee = async (req, res) => {
   try {
     const {
       email,
@@ -21,29 +13,20 @@ const inviteEmployee = async (
       departmentId
     } = req.body
 
-
-    let user =
-      await User.findOne({ email });
+    let user = await User.findOne({ email })
 
     // Generate invite token
-    const inviteToken =
-      crypto.randomBytes(32).toString(
-        'hex'
-      );
+    const inviteToken = crypto.randomBytes(32).toString('hex')
 
-    const inviteExpiry =
-      Date.now() +
-      24 * 60 * 60 * 1000;
+    const inviteExpiry = Date.now() + 24 * 60 * 60 * 1000
 
     // Existing inactive user
     if (user) {
-      user.inviteToken =
-        inviteToken;
+      user.inviteToken = inviteToken
 
-      user.inviteExpiry =
-        inviteExpiry;
+      user.inviteExpiry = inviteExpiry
 
-      await user.save();
+      await user.save()
     } else {
       // Create inactive user
       user = await User.create({
@@ -52,8 +35,8 @@ const inviteEmployee = async (
         role: 'employee',
         isActive: false,
         inviteToken,
-        inviteExpiry,
-      });
+        inviteExpiry
+      })
 
       // Create employee profile
       await EmployeeProfile.create({
@@ -64,44 +47,34 @@ const inviteEmployee = async (
         address,
         hireDate,
         jobTitle,
-        departmentId,
-      });
+        departmentId
+      })
     }
-
 
     // Invitation link
     const link =
-      `${process.env.CLIENT_URL}` +
-      `/setup-account?token=${inviteToken}`;
+      `${process.env.CLIENT_URL}` + `/setup-account?token=${inviteToken}`
 
     // Send email
     await sendEmail({
       to: email,
-      subject:
-        'Employee Invitation',
-      text:
-        `Hi ${firstName}, ` +
-        `set up your account here: ` +
-        `${link}`,
-    });
+      subject: 'Employee Invitation',
+      text: `Hi ${firstName}, ` + `set up your account here: ` + `${link}`
+    })
 
     return res.status(200).json({
       success: true,
 
-      message:
-        'Employee invited successfully',
-    });
-
+      message: 'Employee invited successfully'
+    })
   } catch (error) {
-    console.log(error.message);
+    console.log(error.message)
 
     return res.status(500).json({
       success: false,
 
-      message:
-        'Could not invite employee',
-    });
-
+      message: 'Could not invite employee'
+    })
   }
 }
 

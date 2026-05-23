@@ -22,25 +22,9 @@ const userSchema = new Schema(
       default: 'STAFF',
       required: true
     },
-<<<<<<< HEAD
     isActive: { type: Boolean, default: false },
     inviteToken: { type: String, default: null },
     inviteExpiry: { type: Date, default: null }
-=======
-    inviteToken: {
-      type: String,
-    },
-
-    inviteExpiry: {
-      type: Date,
-    },
-
-    isActive: {
-      type: Boolean,
-      default: false,
-    },  
-    
->>>>>>> main
   },
   { timestamps: true }
 )
@@ -48,5 +32,3 @@ const userSchema = new Schema(
 const User = mongoose.model('User', userSchema)
 
 export default User
-
-

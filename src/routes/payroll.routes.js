@@ -1,30 +1,30 @@
-import express from 'express';
+import express from 'express'
 import {
   generatePayroll,
   getEmployeePayslips,
   getPayslipById,
   upsertSalaryStructure,
-  getSalaryStructure,
-} from '../controllers/payroll.contoller.js';
+  getSalaryStructure
+} from '../controllers/payroll.contoller.js'
 
-import authentication from '../middlewares/auth/authentication.js';
-import authorization from '../middlewares/auth/authorization.js';
+import authentication from '../middlewares/auth/authentication.js'
+import authorization from '../middlewares/auth/authorization.js'
 
-const router = express.Router();
+const router = express.Router()
 
 router.post(
   '/salary-structure',
   authentication,
   authorization('ADMIN'),
   upsertSalaryStructure
-);
+)
 
 router.get(
   '/salary-structure/:userId',
   authentication,
   authorization('ADMIN', 'STAFF'),
   getSalaryStructure
-);
+)
 
 //Payroll Generation
 router.post(
@@ -32,7 +32,7 @@ router.post(
   authentication,
   authorization('ADMIN'),
   generatePayroll
-);
+)
 
 //Payslip Retrieval
 router.get(
@@ -40,13 +40,13 @@ router.get(
   authentication,
   authorization('ADMIN', 'STAFF'),
   getEmployeePayslips
-);
+)
 
 router.get(
   '/:payslipId',
   authentication,
-  authorization('ADMIN', 'STAFF', 'USER'),
+  authorization('ADMIN', 'STAFF'),
   getPayslipById
-);
+)
 
-export default router;
+export default router

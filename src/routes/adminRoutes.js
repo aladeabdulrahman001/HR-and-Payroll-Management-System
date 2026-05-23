@@ -4,8 +4,15 @@ import authorization from '../middlewares/auth/authorization.js'
 import setRole from '../middlewares/auth/setRole.js'
 import inviteUser from '../controllers/auth/inviteUser.js'
 import inviteUserValidation from '../middlewares/auth/inviteUserValidation.js'
-
-// import { createDepartment } from '../controllers/departmentController.js'
+import {
+  createDepartment,
+  getDepartments
+} from '../controllers/departmentController.js'
+import validateDepartmentCreation from '../middlewares/validators/departmentValidation.middleware.js'
+import {
+  deactivateEmployee,
+  getEmployees
+} from '../controllers/employeeProfileController.js'
 
 const adminRouter = express.Router()
 
@@ -27,8 +34,21 @@ adminRouter.post(
   inviteUser
 )
 
-adminRouter.get('/onboard/department', (req, res) => {
-  res.status(200).send('Onboard department endpoint working')
-})
+adminRouter.post(
+  '/onboard/department',
+  authorization('ADMIN'),
+  validateDepartmentCreation,
+  createDepartment
+)
+
+adminRouter.get('/departments', authorization('ADMIN'), getDepartments)
+
+adminRouter.get('/employees', authorization('ADMIN'), getEmployees)
+
+adminRouter.patch(
+  '/employee/:id/deactivate',
+  authorization('ADMIN'),
+  deactivateEmployee
+)
 
 export default adminRouter

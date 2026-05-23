@@ -18,11 +18,35 @@ const inviteUser = async (req, res) => {
   try {
     let user = await User.findOne({ email })
 
-    if (user && user.isActive) {
-      return res.status(409).json({
-        success: false,
-        error: { message: 'User already exists' }
+    if (user) {
+      const hasEmployeeProfile = await EmployeeProfile.findOne({
+        userId: user._id
       })
+
+      if (user.isActive && hasEmployeeProfile) {
+        return res.status(409).json({
+          success: false,
+          error: { message: 'User already has active accounts' }
+        })
+      }
+
+      if (user.isActive && !hasEmployeeProfile) {
+        await EmployeeProfile.create({
+          userId: user._id,
+          firstName,
+          lastName,
+          phone,
+          address,
+          departmentId,
+          jobTitle,
+          hireDate
+        })
+
+        return res.status(201).json({
+          success: true,
+          message: 'Employee profile created for existing user'
+        })
+      }
     }
 
     const inviteToken = crypto.randomBytes(32).toString('hex')
@@ -39,9 +63,6 @@ const inviteUser = async (req, res) => {
         inviteToken,
         inviteExpiry
       })
-
-      //   const count = await EmployeeProfile.countDocuments()
-      //   const employeeId = `${new Date().getFullYear()}-${department.slice(0, 3).toUpperCase()}-${String(count + 1).padStart(4, '0')}`
 
       await EmployeeProfile.create({
         userId: user._id,
