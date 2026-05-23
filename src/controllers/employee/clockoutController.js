@@ -1,6 +1,6 @@
-import Attendance from '../models/attendance.js'
-import EmployeeProfile from '../models/employeeProfileModel.js'
-import calculateTotalHours from '../service/attendanceClockout.js'
+import Attendance from '../../models/attendance.js'
+import EmployeeProfile from '../../models/employeeProfileModel.js'
+import calculateTotalHours from '../../services/attendanceClockout.js'
 
 const clockOut = async (req, res) => {
   try {
