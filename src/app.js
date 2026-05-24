@@ -23,7 +23,7 @@ app.use(express.json())
 // Routes
 app.use('/api/v1/auth', authRouter)
 
-app.use('/api/employees', employeeRoutes)
+app.use('/api/employee', employeeRoutes)
 
 app.use('/api/hr', hrRoutes)
 

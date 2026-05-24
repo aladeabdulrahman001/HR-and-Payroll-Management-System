@@ -5,8 +5,8 @@ import authentication from '../middlewares/auth/authentication.js'
 import authorization from '../middlewares/auth/authorization.js'
 import inviteUserValidation from '../middlewares/auth/inviteUserValidation.js'
 import {
-  getAttendance,
-  getSingleAttendance
+  getAllAttendance,
+  getEmployeeAttendance
 } from '../controllers/hr/attendanceController.js'
 import { getEmployees } from '../controllers/hr/employeeProfileController.js'
 import attendanceValidation from '../middlewares/validators/attendanceValidation.js'
@@ -17,6 +17,8 @@ import {
   leaveIdValidation,
   reviewLeaveValidation
 } from '../middlewares/validators/leaveValidation.js'
+import { getDepartments } from '../controllers/departmentController.js'
+import { getEmployeePayslips } from '../controllers/payroll.contoller.js'
 
 const router = express.Router()
 
@@ -31,14 +33,16 @@ router.post(
   inviteUser
 )
 
+router.get('/departments', getDepartments)
+
 router.get('/employees', getEmployees)
 
-router.get('/employees/attendance', getAttendance)
+router.get('/employees/attendance', getAllAttendance)
 
 router.get(
   '/employee/:id/attendance',
   attendanceValidation,
-  getSingleAttendance
+  getEmployeeAttendance
 )
 
 router.get('/leaves', getLeaves)

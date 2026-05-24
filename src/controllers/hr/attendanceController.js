@@ -2,7 +2,7 @@ import Attendance from '../../models/attendance.js'
 import mongoose from 'mongoose'
 import EmployeeProfile from '../../models/employeeProfileModel.js'
 
-const getAttendance = async (req, res) => {
+const getAllAttendance = async (req, res) => {
   try {
     const attendance = await Attendance.find().populate({
       path: 'employeeId',
@@ -26,11 +26,11 @@ const getAttendance = async (req, res) => {
   }
 }
 
-const getSingleAttendance = async (req, res) => {
+const getEmployeeAttendance = async (req, res) => {
   try {
     const employeeId = req.params.id
 
-    const attendance = await Attendance.findOne({
+    const attendance = await Attendance.find({
       employeeId: employeeId
     }).populate({
       path: 'employeeId',
@@ -43,6 +43,7 @@ const getSingleAttendance = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      count: attendance.length,
       data: attendance
     })
   } catch (error) {
@@ -55,4 +56,4 @@ const getSingleAttendance = async (req, res) => {
   }
 }
 
-export { getAttendance, getSingleAttendance }
+export { getAllAttendance, getEmployeeAttendance }

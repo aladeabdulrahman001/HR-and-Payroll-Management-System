@@ -82,7 +82,7 @@ export const cancelLeaveService = async ({ leaveId, userId }) => {
 
 // get all leaves
 export const getLeavesService = async () => {
-  const leaves = await Leave.find()
+  const leaves = await Leave.find({ status: { $ne: 'cancelled' } })
     .populate('employeeId', 'firstName lastName jobTitle')
     .populate('reviewedBy', 'email')
     .sort({ createdAt: -1 })
@@ -92,7 +92,7 @@ export const getLeavesService = async () => {
 
 // get specific employee leaves
 export const getEmployeeLeavesService = async ({ employeeId }) => {
-  const leaves = await Leave.find({ employeeId })
+  const leaves = await Leave.find({ employeeId, status: { $ne: 'cancelled' } })
     .populate('employeeId', 'firstName lastName jobTitle')
     .sort({ createdAt: -1 })
 
@@ -106,7 +106,19 @@ export const reviewLeaveService = async ({
   comment,
   hrUserId
 }) => {
-  const leave = await Leave.findById(leaveId).populate('employeeId')
+  const leave = await Leave.findById(leaveId)
+    .populate({
+      path: 'employeeId',
+      select: 'firstName lastName jobTitle departmentId userId',
+      populate: {
+        path: 'departmentId',
+        select: 'name description'
+      }
+    })
+    .populate({
+      path: 'reviewedBy',
+      select: 'email role'
+    })
 
   if (!leave) throw new Error('Leave request not found')
 
@@ -137,7 +149,7 @@ export const reviewLeaveService = async ({
   await sendEmail({
     to: employeeUser.email,
     subject: 'Leave Request Update',
-    text: `Hi ${leave.employeeId.firstName}, your leave request from ${leave.startDate.toDateString()} to ${leave.endDate.toDateString()} has been ${status}.${comment ? ` Comment: ${comment}` : ''}`
+    text: `Hi ${leave.employeeId.firstName}, your leave request from ${leave.startDate.toDateString()} to ${leave.endDate.toDateString()} has been ${status}.${comment ? ` ${comment}` : ''}`
   })
 
   return leave
