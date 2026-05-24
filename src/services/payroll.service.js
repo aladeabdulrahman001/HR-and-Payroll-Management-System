@@ -115,15 +115,15 @@ const calculatePayroll = (
   }
 }
 
-const generatePayroll = async (userId, month, year, generatedBy) => {
+const generatePayroll = async (employeeId, month, year, generatedBy) => {
   //Idempotency check
-  const existingPayslip = await Payslip.findOne({ userId, month, year })
+  const existingPayslip = await Payslip.findOne({ employeeId, month, year })
   if (existingPayslip) {
     return { created: false, payslip: existingPayslip }
   }
 
   const salaryStructure = await SalaryStructure.findOne({
-    userId,
+    employeeId,
     isActive: true
   })
   if (!salaryStructure) {
@@ -138,13 +138,13 @@ const generatePayroll = async (userId, month, year, generatedBy) => {
   const monthEnd = new Date(year, month, 0, 23, 59, 59)
 
   const attendanceRecords = await Attendance.find({
-    employeeId: userId,
+    employeeId: employeeId,
     date: { $gte: monthStart, $lte: monthEnd }
   })
 
   // Remember to adjust 'leaveType' and 'status' values to match team's Leave model exactly once you see it
   const unpaidLeaveRecords = await Leave.find({
-    userId,
+    employeeId,
     status: 'approved',
     leaveType: 'unpaid',
     startDate: { $lte: monthEnd },
@@ -166,24 +166,29 @@ const generatePayroll = async (userId, month, year, generatedBy) => {
   )
 
   const payslip = await Payslip.create({
-    userId,
+    employeeId,
     month,
     year,
     generatedBy,
     ...computed
   })
 
-  return { created: true, payslip }
+  const populatedPayslip = await payslip.populate({
+    path: 'employeeId',
+    select: 'firstName lastName jobTitle' // only expose safe fields from User
+  })
+
+  return { created: true, payslip: populatedPayslip }
 }
 
-const getEmployeePayslips = async (userId) => {
-  return Payslip.find({ userId }).sort({ year: -1, month: -1 })
+const getEmployeePayslips = async (employeeId) => {
+  return Payslip.find({ employeeId }).sort({ year: -1, month: -1 })
 }
 
 const getPayslipById = async (payslipId) => {
   const payslip = await Payslip.findById(payslipId).populate({
-    path: 'userId',
-    select: 'email role' // only expose safe fields from User
+    path: 'employeeId',
+    select: 'firstName lastName jobTitle' // only expose safe fields from User
   })
 
   if (!payslip) {
@@ -197,17 +202,28 @@ const getPayslipById = async (payslipId) => {
 
 //Create or update a salary structure for an employee.
 // Uses upsert so calling it twice is safe.
-const upsertSalaryStructure = async (userId, data) => {
+const upsertSalaryStructure = async (employeeId, data) => {
   const structure = await SalaryStructure.findOneAndUpdate(
-    { userId },
-    { ...data, userId },
+    { employeeId },
+    { ...data, employeeId },
     { returnDocument: 'after', upsert: true, runValidators: true }
-  )
+  ).populate({
+    path: 'employeeId',
+    select: 'firstName lastName jobTitle' // only expose safe fields from User
+  })
+
   return structure
 }
 
-const getSalaryStructure = async (userId) => {
-  const structure = await SalaryStructure.findOne({ userId, isActive: true })
+const getSalaryStructure = async (employeeId) => {
+  const structure = await SalaryStructure.findOne({
+    employeeId,
+    isActive: true
+  }).populate({
+    path: 'employeeId',
+    select: 'firstName lastName jobTitle' // only expose safe fields from User
+  })
+
   if (!structure) {
     const error = new Error('Salary structure not found for this employee')
     error.statusCode = 404

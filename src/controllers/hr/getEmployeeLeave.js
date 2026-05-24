@@ -22,6 +22,7 @@ const getEmployeeLeaves = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      count: leaves.length,
       data: leaves
     })
   } catch (err) {

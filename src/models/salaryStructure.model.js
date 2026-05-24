@@ -1,59 +1,59 @@
-import mongoose from 'mongoose';
+import mongoose from 'mongoose'
 
 const allowanceDeductionSchema = new mongoose.Schema(
   {
     name: {
       type: String,
       required: [true, 'Name is required'],
-      trim: true,
+      trim: true
     },
     amount: {
       type: Number,
       required: [true, 'Amount is required'],
-      min: [0, 'Amount cannot be negative'],
-    },
+      min: [0, 'Amount cannot be negative']
+    }
   },
   { _id: false }
-);
+)
 
 const salaryStructureSchema = new mongoose.Schema(
   {
-    userId: {
+    employeeId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: 'User',           
-      required: [true, 'User ID is required'],
-      unique: true,          
+      ref: 'EmployeeProfile',
+      required: [true, 'Employee ID is required'],
+      unique: true // One active salary structure per employee
     },
     baseSalary: {
       type: Number,
       required: [true, 'Base salary is required'],
-      min: [0, 'Base salary cannot be negative'],
+      min: [0, 'Base salary cannot be negative']
     },
     taxRate: {
       // Store as decimal e.g. 0.15 = 15%
       type: Number,
       required: [true, 'Tax rate is required'],
       min: [0, 'Tax rate cannot be negative'],
-      max: [1, 'Tax rate must be between 0 and 1 (e.g. 0.15 for 15%)'],
+      max: [1, 'Tax rate must be between 0 and 1 (e.g. 0.15 for 15%)']
     },
     standardAllowances: {
       type: [allowanceDeductionSchema],
-      default: [],
+      default: []
     },
     standardDeductions: {
       type: [allowanceDeductionSchema],
-      default: [],
+      default: []
     },
     isActive: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   },
   {
-    timestamps: true,
+    timestamps: true
   }
-);
+)
 
-const SalaryStructure = mongoose.model('SalaryStructure', salaryStructureSchema);
+const SalaryStructure = mongoose.model('SalaryStructure', salaryStructureSchema)
 
-export default SalaryStructure;
+export default SalaryStructure

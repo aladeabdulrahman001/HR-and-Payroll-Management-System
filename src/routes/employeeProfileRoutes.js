@@ -12,6 +12,7 @@ import {
   requestLeaveValidation,
   leaveIdValidation
 } from '../middlewares/validators/leaveValidation.js'
+import { getMyPayslips } from '../controllers/payroll.contoller.js'
 
 const router = express.Router()
 
@@ -23,10 +24,12 @@ router.post('/clockout', clockoutValidation, clockOut)
 
 router.post('/clockin', clockinValidation, clockIn)
 
-router.post('/leaves/request', requestLeaveValidation, requestLeave)
+router.post('/leave/request', requestLeaveValidation, requestLeave)
 
-router.delete('/leaves/:id/cancel', leaveIdValidation, cancelLeave)
+router.patch('/leave/:id/cancel', leaveIdValidation, cancelLeave)
 
 router.get('/leaves/me', getMyLeaves)
+
+router.get('/payslips/me', getMyPayslips)
 
 export default router

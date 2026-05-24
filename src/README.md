@@ -1,6 +1,6 @@
 # HR and Payroll Management System
 
-A backend API for HR and payroll operations, including user onboarding, role-based access, attendance tracking, department management, and payroll generation.
+A backend API for HR and payroll management with invite-based onboarding, role-based access, attendance tracking, department administration, salary structures, and payslip generation.
 
 ## Table of Contents
 
@@ -19,18 +19,19 @@ A backend API for HR and payroll operations, including user onboarding, role-bas
 
 ## Features
 
+- Invite-based onboarding for `ADMIN`, `HRM`, and `STAFF`
 - Role-based authentication and authorization
-- Invite-based onboarding for ADMIN, HRM, and STAFF users
 - Department creation and listing
-- Employee management and deactivation
+- Employee onboarding and deactivation
 - Attendance clock-in / clock-out
-- Payroll salary structure management
-- Payroll generation and payslip retrieval
+- Leave request and review workflows
+- Salary structure management and payroll generation
+- Payslip retrieval
 
 ## Installation
 
 1. Clone the repository.
-2. Navigate to the `src` folder:
+2. Change into the `src` folder:
    ```bash
    cd HR-and-Payroll-Management-System/src
    ```
@@ -39,21 +40,32 @@ A backend API for HR and payroll operations, including user onboarding, role-bas
    npm install
    ```
 
+## Quick Start
+
+```bash
+cd HR-and-Payroll-Management-System/src
+npm install
+node app.js
+```
+
+Then open `http://localhost:<PORT>/` in your browser or send requests to the API.
+
 ## Environment
 
-Create a `.env.development.local` file with the required environment variables.
+Create a `.env.development.local` file at the project root (next to `app.js`) with the required environment variables.
 
-Common variables include:
+Required environment variables include:
 
 - `PORT`
+- `DB_URI`
 - `JWT_SECRET`
 - `JWT_EXPIRES_IN`
 - `CLIENT_URL`
-- MongoDB connection variables as defined in `src/utils/env.js`
+- `RESEND_API_KEY`
 
 ## Running the Server
 
-Start the app from the `src` folder:
+From the `src` folder, run:
 
 ```bash
 node app.js
@@ -62,7 +74,7 @@ node app.js
 The API base routes are mounted in `src/app.js` as:
 
 - `/api/v1/auth`
-- `/api/employees`
+- `/api/employee`
 - `/api/hr`
 - `/api/admin`
 - `/api/payroll`
@@ -73,13 +85,11 @@ A root `GET /` request returns a welcome message.
 
 ### Authentication
 
-This API uses invite-based onboarding. Users must be invited by an ADMIN or HRM user before they can set up an account and sign in.
-
-> There is no public self-registration endpoint in this version.
+The API uses invite-based onboarding. Users must be invited before they can set up an account or sign in.
 
 #### `POST /api/v1/auth/sign-in`
 
-Log in and receive a JWT token.
+Authenticate and receive a JWT.
 
 Body:
 
@@ -104,7 +114,7 @@ Body:
 
 #### `POST /api/v1/auth/setup-account`
 
-Complete account setup after receiving an invite token. This creates the user password and activates the account.
+Complete account setup using an invite token.
 
 Body:
 
@@ -117,13 +127,13 @@ Body:
 
 ### Admin Operations
 
-All `/api/admin` operations require authentication and ADMIN authorization.
+All `/api/admin` routes require authentication and `ADMIN` authorization.
 
 #### `POST /api/admin/onboard/admin`
 
-Invite a new ADMIN user.
+Invite a new `ADMIN` user.
 
-Body:
+Body example:
 
 ```json
 {
@@ -140,9 +150,9 @@ Body:
 
 #### `POST /api/admin/onboard/hr`
 
-Invite a new HRM user.
+Invite a new `HRM` user.
 
-Body is the same as `onboard/admin`.
+Body: same as `onboard/admin`.
 
 #### `POST /api/admin/onboard/department`
 
@@ -160,11 +170,11 @@ Body:
 
 #### `GET /api/admin/departments`
 
-Get a list of all departments.
+Get all departments.
 
 #### `GET /api/admin/employees`
 
-Get a paginated list of active employees.
+Get active employees.
 
 Query parameters:
 
@@ -175,17 +185,17 @@ Query parameters:
 
 #### `PATCH /api/admin/employee/:id/deactivate`
 
-Deactivate an employee profile by employee ID.
+Deactivate an employee profile.
 
 ### HR Operations
 
-All `/api/hr` operations require authentication.
+All `/api/hr` routes require authentication and `ADMIN` or `HRM` role.
 
 #### `POST /api/hr/onboard/employee`
 
-Invite a new STAFF employee.
+Invite a new `STAFF` employee.
 
-Body:
+Body example:
 
 ```json
 {
@@ -200,9 +210,13 @@ Body:
 }
 ```
 
+#### `GET /api/hr/departments`
+
+Get all departments.
+
 #### `GET /api/hr/employees`
 
-Get a paginated list of active employees.
+Get active employees.
 
 #### `GET /api/hr/employees/attendance`
 
@@ -210,76 +224,103 @@ Get all attendance records.
 
 #### `GET /api/hr/employee/:id/attendance`
 
-Get attendance details for a single employee by ID.
+Get attendance for a specific employee.
+
+#### `GET /api/hr/leaves`
+
+Get all leave requests.
+
+#### `GET /api/hr/employee/:id/leaves`
+
+Get leave requests for a specific employee.
+
+#### `PATCH /api/hr/leaves/:id/review`
+
+Review a leave request.
 
 ### Employee Operations
 
-All `/api/employees` operations require authentication and role authorization for `ADMIN`, `HRM`, or `STAFF`.
+All `/api/employee` routes require authentication and `ADMIN`, `HRM`, or `STAFF` authorization.
 
-#### `POST /api/employees/clockin`
+#### `POST /api/employee/clockin`
 
-Record a clock-in event for the authenticated user.
+Record clock-in for the authenticated user.
 
-#### `POST /api/employees/clockout`
+#### `POST /api/employee/clockout`
 
-Record a clock-out event for the authenticated user.
+Record clock-out for the authenticated user.
+
+#### `POST /api/employee/leave/request`
+
+Request leave.
+
+#### `PATCH /api/employee/leave/:id/cancel`
+
+Cancel a leave request.
+
+#### `GET /api/employee/leaves/me`
+
+Get the authenticated user's leave requests.
+
+#### `GET /api/employee/payslips/me`
+
+Get the authenticated user's payslips.
 
 ### Payroll Operations
 
-All `/api/payroll` operations require authentication.
+The payroll router is mounted under `/api/payroll`.
 
 #### `POST /api/payroll/salary-structure`
 
-Create or update a salary structure for an employee.
+Create or update a salary structure.
 
-Body:
+Body example:
 
 ```json
 {
-  "userId": "<userObjectId>",
+  "employeeId": "<employeeObjectId>",
   "baseSalary": 50000,
   "taxRate": 0.2,
-  "standardAllowances": ["housing", "transport"],
-  "standardDeductions": ["pension"]
+  "standardAllowances": [{ "name": "housing", "amount": 5000 }],
+  "standardDeductions": [{ "name": "pension", "amount": 2000 }]
 }
 ```
 
-#### `GET /api/payroll/salary-structure/:userId`
+#### `GET /api/payroll/salary-structure/:employeeId`
 
-Get salary structure for a specific employee.
+Get salary structure for an employee.
 
 #### `POST /api/payroll/generate`
 
-Generate payroll for an employee for a month and year.
+Generate payroll for an employee.
 
-Body:
+Body example:
 
 ```json
 {
-  "userId": "<userObjectId>",
+  "employeeId": "<employeeObjectId>",
   "month": 5,
   "year": 2026
 }
 ```
 
-#### `GET /api/payroll/employee/:userId`
+#### `GET /api/payroll/employee/:employeeId`
 
-Get all payslips for a specific employee.
+Get all payslips for an employee.
 
 #### `GET /api/payroll/:payslipId`
 
-Get a single payslip by ID.
+Get a payslip by ID.
 
 ## Roles
 
-- `ADMIN` — full access to admin onboarding, department management, employee listing, and payroll generation.
-- `HRM` — can onboard employees and view attendance and employee data.
-- `STAFF` — can clock in/out, view salary structure, and view own payslips.
+- `ADMIN` — onboard admins and HR, manage departments, view employees, deactivate profiles, manage salary structures, and generate payroll.
+- `HRM` — onboard employees, view departments, attendance, and leaves, and access payroll read endpoints.
+- `STAFF` — clock in/out, request and cancel leaves, and view own payslips.
 
 ## Notes
 
-- This project uses invite-based onboarding. Users are invited via admin or HR routes, receive an email with a setup token, and must complete `/api/v1/auth/setup-account` before they can log in.
-- `role` values for onboarding are assigned by middleware (`ADMIN`, `HRM`, `STAFF`).
-- Protect routes with the JWT token returned from `/api/v1/auth/sign-in`.
-- Validation error responses are returned with `success: false` and an `error` object.
+- The project uses invite-based onboarding. Invited users complete `/api/v1/auth/setup-account` before signing in.
+- Protect requests with the JWT returned from `/api/v1/auth/sign-in`.
+- Validation errors typically return `success: false` and an `error` object.
 - The root endpoint `GET /` returns a welcome message.

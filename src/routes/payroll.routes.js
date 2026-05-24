@@ -20,9 +20,9 @@ router.post(
 )
 
 router.get(
-  '/salary-structure/:userId',
+  '/salary-structure/:employeeId',
   authentication,
-  authorization('ADMIN', 'STAFF'),
+  authorization('ADMIN', 'HRM'),
   getSalaryStructure
 )
 
@@ -36,16 +36,16 @@ router.post(
 
 //Payslip Retrieval
 router.get(
-  '/employee/:userId',
+  '/employee/:employeeId',
   authentication,
-  authorization('ADMIN', 'STAFF'),
+  authorization('ADMIN', 'HRM'),
   getEmployeePayslips
 )
 
 router.get(
   '/:payslipId',
   authentication,
-  authorization('ADMIN', 'STAFF'),
+  authorization('ADMIN', 'HRM'),
   getPayslipById
 )
 
