@@ -276,6 +276,20 @@ Get a single payslip by ID.
 - `HRM` — can onboard employees and view attendance and employee data.
 - `STAFF` — can clock in/out, view salary structure, and view own payslips.
 
+- 
+## API Documentation
+
+A complete Postman collection is available for testing all 29 API endpoints across 6 categories (Authentication, Admin, HR, Employee, Payroll, and Health Check).
+
+### Postman Collection Files
+- `HR_Payroll_API_Postman_Collection.json` — 29 pre-configured requests
+- `HR_Payroll_Dev_Environment.json` — Environment variables for testing
+
+## Contributors
+
+- [aladeabdulrahman001](https://github.com/aladeabdulrahman001) — API Documentation & Postman Collection
+
+
 ## Notes
 
 - This project uses invite-based onboarding. Users are invited via admin or HR routes, receive an email with a setup token, and must complete `/api/v1/auth/setup-account` before they can log in.
