@@ -106,7 +106,14 @@ export const reviewLeaveService = async ({
   comment,
   hrUserId
 }) => {
-  const leave = await Leave.findById(leaveId).populate('employeeId')
+  const leave = await Leave.findById(leaveId).populate({
+    path: 'employeeId',
+    select: 'firstName lastName jobTitle departmentId userId',
+    populate: {
+      path: 'departmentId',
+      select: 'name description'
+    }
+  })
 
   if (!leave) throw new Error('Leave request not found')
 
@@ -137,7 +144,7 @@ export const reviewLeaveService = async ({
   await sendEmail({
     to: employeeUser.email,
     subject: 'Leave Request Update',
-    text: `Hi ${leave.employeeId.firstName}, your leave request from ${leave.startDate.toDateString()} to ${leave.endDate.toDateString()} has been ${status}.${comment ? ` Comment: ${comment}` : ''}`
+    text: `Hi ${leave.employeeId.firstName}, your leave request from ${leave.startDate.toDateString()} to ${leave.endDate.toDateString()} has been ${status}.${comment ? ` ${comment}` : ''}`
   })
 
   return leave
